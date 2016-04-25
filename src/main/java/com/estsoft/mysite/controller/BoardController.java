@@ -22,8 +22,6 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	//TODO: 회원정보 수정 코드 구현
-
 	//FIXME @RequestMapping("/") 이건 왜 안되지?
 	@RequestMapping("")
 	public String index(@RequestParam(value="kwd", defaultValue="") String kwd,  @RequestParam(value="p", defaultValue="1") String page, Model model) {
@@ -61,8 +59,6 @@ public class BoardController {
 		return "/board/reply";
 	}
 	
-	
-	//TODO: no=null일때 에러처리(modifyformAction.java)
 	@RequestMapping(value="/modify/{no}", method=RequestMethod.GET)
 	public String modifyform(@PathVariable( "no" ) Long no, Model model){
 		BoardVo boardVo = boardService.get(no);
@@ -70,8 +66,6 @@ public class BoardController {
 		return "/board/modify";
 	}
 	
-	
-	//TODO: 선생님 코드에도 modify 구현 안되어있음. DAO modify는 이전 practice 코드 참고
 	@RequestMapping(value="/modify/{no}", method=RequestMethod.POST)
 	public String modify(@PathVariable( "no" ) Long no, Model model){
 		BoardVo boardVo = boardService.view(no);
@@ -80,8 +74,6 @@ public class BoardController {
 		return "/board/";
 	}
 	
-	
-	//TODO: 삭제 코드도 practice 코드 참고하여 구현
 	@RequestMapping(value="/delete", method=RequestMethod.GET)
 	public String deleteform(@PathVariable( "no" ) Long no, Model model){
 		//

@@ -1,0 +1,7 @@
+회원정보 수정 코드 구현
+css적용(practice참고)
+자원정리 코드 WebUtils 로 처리
+선생님 코드에도 modify 구현 안되어있음. DAO modify는 이전 practice 코드 참고
+삭제 코드도 practice 코드 참고하여 구현
+또라이 클라이언트 처리: no=null일때 에러처리(modifyformAction.java)
+Obtaining Auto-Increment Values?
