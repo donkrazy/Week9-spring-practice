@@ -17,7 +17,7 @@ import com.estsoft.mysite.vo.GuestbookVo;
 @RequestMapping( "/guestbook" )
 public class GuestbookController {
 	@Autowired
-	GuestbookDao dao;
+	private GuestbookDao dao;
 
 	@RequestMapping( "/ ")
 	public String index( Model model ) {
@@ -26,7 +26,7 @@ public class GuestbookController {
 		return "/guestbook/list";
 	}
 	
-	@RequestMapping( "/deleteform/{no}" )
+	@RequestMapping( value="/delete/{no}", method=RequestMethod.GET )
 	public String deleteform( @PathVariable( "no" ) Long no, Model model ) {
 		model.addAttribute( "no", no );
 		return "/guestbook/deleteform";

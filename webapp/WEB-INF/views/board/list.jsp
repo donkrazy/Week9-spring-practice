@@ -47,12 +47,12 @@
 								<c:when test="${vo.depth > 0 }">
 									<td style="text-align:left; padding-left:${20*vo.depth }px">
 										<img src="${pageContext.request.contextPath}/assets/images/reply.png">
-										<a href="${pageContext.request.contextPath}/board?a=view&no=${vo.no }">${vo.title }</a>
+										<a href="${pageContext.request.contextPath}/board/view/${vo.no }">${vo.title }</a>
 									</td>
 								</c:when>
 								<c:otherwise>
 									<td style="text-align:left">
-										<a href="${pageContext.request.contextPath}/board?a=view&no=${vo.no }">${vo.title }</a>
+										<a href="${pageContext.request.contextPath}/board/view/${vo.no }">${vo.title }</a>
 									</td>
 								</c:otherwise>	
 							</c:choose>
@@ -62,7 +62,7 @@
 							<td>
 								<c:choose>
 									<c:when test="${ not empty authUser && authUser.no == vo.userNo }">
-										<a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no }" class="del">삭제</a>
+										<a href="${pageContext.request.contextPath}/board/delete/${vo.no }" class="del">삭제</a>
 									</c:when>
 									<c:otherwise>
 										&nbsp;
@@ -95,7 +95,7 @@
 				</div>
 				<div class="bottom">
 					<c:if test="${not empty authUser }">
-						<a href="${pageContext.request.contextPath}/board?a=writeform" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/write" id="new-book">글쓰기</a>
 					</c:if>
 				</div>				
 			</div>

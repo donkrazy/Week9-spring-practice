@@ -8,15 +8,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.estsoft.db.DBConnection;
 import com.estsoft.mysite.vo.BoardVo;
 
-public class BoardDao {
-	private DBConnection dbConnection;
 
-	public BoardDao( DBConnection dbConnection ) {
-		this.dbConnection = dbConnection;
-	}
+@Repository
+public class BoardDao {
+	@Autowired
+	private DBConnection dbConnection;
 
 	public BoardVo get( Long boardNo ) {
 		BoardVo boardVo = null;
@@ -266,25 +268,22 @@ public class BoardDao {
 			if( null == boardVo.getGroupNo() ) {
 				// 새글 등록
 				String sql = 
-					"INSERT INTO board" +  
-					"       VALUES ( null, ?, ?, now(), 0, ( select ifnull( max( group_no ), 0 ) + 1  from board as b ), 1, 0, ?)";  
+					"INSERT INTO board VALUES( null, ?, now(), ?, ?, (select ifnull( max( group_no ), 0 ) + 1 from board as b), "
+					+ "1, 0, 0 )";  
 				pstmt = conn.prepareStatement( sql );
-
 				pstmt.setString( 1, boardVo.getTitle() );
 				pstmt.setString( 2, boardVo.getContent() );
 				pstmt.setLong( 3, boardVo.getUserNo() );
 			} else {
 				// 답글 등록
-				String sql = 
-					"INSERT INTO board" +  
-					"       VALUES ( null, ?, ?, now(), 0, ?, ?, ?, ?)";  
+				String sql = "INSERT INTO board VALUES( null, ?, now(), ?, ?, ?, ?, ?, 1)";
 				pstmt = conn.prepareStatement( sql );
 				pstmt.setString( 1, boardVo.getTitle() );
 				pstmt.setString( 2, boardVo.getContent() );
-				pstmt.setInt( 3, boardVo.getGroupNo() );
-				pstmt.setInt( 4, boardVo.getOrderNo() );
-				pstmt.setInt( 5, boardVo.getDepth() );
-				pstmt.setLong( 6, boardVo.getUserNo() );
+				pstmt.setLong( 3, boardVo.getUserNo() );
+				pstmt.setInt( 4, boardVo.getGroupNo() );
+				pstmt.setInt( 5, boardVo.getOrderNo() );
+				pstmt.setInt( 6, boardVo.getDepth() );
 			}
 			
 			pstmt.executeUpdate();
