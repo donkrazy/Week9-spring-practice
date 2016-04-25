@@ -8,16 +8,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.estsoft.db.DBConnection;
 import com.estsoft.mysite.vo.GuestbookVo;
 
+@Repository
 public class GuestbookDao {
-	private DBConnection dbConnection;
-
-	public GuestbookDao( DBConnection dbConnection ) {
-		this.dbConnection = dbConnection;
-	}
 	
+	@Autowired
+	private DBConnection dbConnection;
 	public GuestbookVo get( Long no ) {
 		GuestbookVo vo = null;
 		Connection conn = null;

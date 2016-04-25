@@ -36,7 +36,7 @@ $(function(){
 		// 3. 약관 체크유무  // jQuery is checked
 
 //		return true;
-		return false;	
+		return true;	
 	});
 	
 	$( "#email" ).change( function() {
