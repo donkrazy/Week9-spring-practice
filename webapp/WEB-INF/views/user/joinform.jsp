@@ -9,10 +9,10 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.request.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" 
-	src="${pageContext.request.contextPath}/ assets/js/jquery/jquery-1.9.0.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
 <script type="text/javascript">
 $(function(){
-	$( "#join-form2").submit( function() {
+	$( "#join-form").submit( function() {
 		//1. 이름 유효성 체크
 		if( $("#name").val() == "" ) {
 			alert( "이름은 필수 요소입니다." );
@@ -50,7 +50,7 @@ $(function(){
 			return;
 		}
 		$.ajax({
-			url: "${pageContext.request.contextPath}/ user?a=checkemail&email=" + email,   //요청 URL
+			url: "${pageContext.request.contextPath}/user/checkemail?email=" + email,   //요청 URL
 			type: "get",                                // 통신 방식 get/post
 			dataType: "json",                        // 수신 데이터 타입
 			data: "",                                    // post방식인 경우 서버에 전달할
@@ -97,7 +97,7 @@ $(function(){
 					<label class="block-label" for="email">이메일</label>
 					<input id="email" name="email" type="text" value="">
 					<input id="btn-checkemail" type="button" value="id 중복체크">
-					<img id="img-checkemail" style="display:none;" src="${pageContext.request.contextPath}/ assets/images/check.png">
+					<img id="img-checkemail" style="display:none;" src="${pageContext.request.contextPath}/assets/images/check.png">
 					
 					<label class="block-label">패스워드</label>
 					<input name="password" type="password" value="">

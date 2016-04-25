@@ -11,12 +11,22 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
+	// @Autowired
+	// private MailSender mailSender;
+	
 	public void join( UserVo vo ) {
 		userDao.insert(vo);
+		// 메일보내기
+		// ..
 	}
 	
-	public Boolean login( UserVo vo ) {
+	public UserVo login( UserVo vo ) {
 		UserVo authUser = userDao.get( vo );
-		return authUser != null;
+		return authUser;
+	}
+	
+	public UserVo getUser( String email ) {
+		UserVo vo = userDao.get( email );
+		return vo;
 	}
 }
