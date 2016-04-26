@@ -17,8 +17,7 @@
 		<div id="content">
 			<div id="board">
 				<form class="board-form" method="post"
-					action="${pageContext.request.contextPath}/board/modify">
-					<input type="hidden" name="no" value="${boardVo.no }">
+					action="${pageContext.request.contextPath}/board/modify/${boardVo.no }">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글수정</th>

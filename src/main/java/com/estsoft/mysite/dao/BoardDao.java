@@ -8,17 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.estsoft.db.DBConnection;
 import com.estsoft.mysite.vo.BoardVo;
 
 
 @Repository
 public class BoardDao {
 	@Autowired
-	private DBConnection dbConnection;
+	private DataSource dataSource;
 
 	public BoardVo get( Long boardNo ) {
 		BoardVo boardVo = null;
@@ -27,7 +28,7 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			
 			String sql =
 				"     SELECT  no, title, content, group_no, order_no, depth, user_no" +
@@ -91,7 +92,7 @@ public class BoardDao {
 				sql += ( "  AND ( title LIKE '%" + keyword + "%' OR title LIKE '%" + keyword + "%')" );
 			}
 		
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery( sql );
 			if( rs.next() ) {
@@ -127,7 +128,7 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 
 			if( null != keyword && "".equals( keyword ) == false ) {
 				String sql =
@@ -204,7 +205,7 @@ public class BoardDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try{
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			String sql = 
 				"UPDATE board" +  
 				"      SET hits = hits + 1" +
@@ -233,7 +234,7 @@ public class BoardDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try{
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			String sql = 
 				"UPDATE board" +  
 				"      SET order_no = order_no + 1" +
@@ -260,21 +261,24 @@ public class BoardDao {
 		}		
 	}
 	
-	public void insert( BoardVo boardVo ) {
+	
+	public long insert( BoardVo boardVo ) {
+		Long no = 0L;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		Statement stmt = null;
+		ResultSet rs  = null;
 		try{
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			if( null == boardVo.getGroupNo() ) {
 				// 새글 등록
-				String sql = 
-					"INSERT INTO board VALUES( null, ?, now(), ?, ?, (select ifnull( max( group_no ), 0 ) + 1 from board as b), "
-					+ "1, 0, 0 )";  
+				String sql = "INSERT INTO board VALUES( null, ?, now(), ?, ?, (select ifnull( max( group_no ), 0 ) + 1 from board as b), 1, 0, 0 )";  
 				pstmt = conn.prepareStatement( sql );
 				pstmt.setString( 1, boardVo.getTitle() );
 				pstmt.setString( 2, boardVo.getContent() );
 				pstmt.setLong( 3, boardVo.getUserNo() );
-			} else {
+				}
+			else {
 				// 답글 등록
 				String sql = "INSERT INTO board VALUES( null, ?, now(), ?, ?, ?, ?, ?, 1)";
 				pstmt = conn.prepareStatement( sql );
@@ -285,9 +289,15 @@ public class BoardDao {
 				pstmt.setInt( 5, boardVo.getOrderNo() );
 				pstmt.setInt( 6, boardVo.getDepth() );
 			}
-			
 			pstmt.executeUpdate();
-		} catch( SQLException ex ) {
+			// return last insert ID
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery( "SELECT LAST_INSERT_ID()" );
+			if( rs.next() ) {
+				no = rs.getLong( 1 );
+			}
+		}
+		 catch( SQLException ex ) {
 			System.out.println( "error:" + ex );
 		} finally {
 			try{
@@ -301,6 +311,7 @@ public class BoardDao {
 				ex.printStackTrace();
 			}
 		}
+		return no;
 	}
 	
 	public void delete( BoardVo boardVo ) {
@@ -308,7 +319,7 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		
 		try{
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			String sql = 
 				" DELETE" +
 				"   FROM board" +  

@@ -9,10 +9,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.estsoft.db.WebUtil;
 import com.estsoft.mysite.dao.BoardDao;
 import com.estsoft.mysite.vo.BoardVo;
 import com.estsoft.mysite.vo.UserVo;
+import com.estsoft.utils.WebUtil;
 
 @Service
 public class BoardService {
@@ -63,16 +63,16 @@ public class BoardService {
 	}
 	
 	
-	//TODO: 이거 두개 하나로 합치면 더 좋을거같다
-	public BoardVo view(long no){
-		boardDao.updateHits( no );
-		BoardVo boardVo = boardDao.get(  no );
-		return boardVo;
-	}
-	
-	public BoardVo get(long no){
-		BoardVo boardVo = boardDao.get(no);
-		return boardVo;
+	public BoardVo get(long no, boolean view){
+		if(view){
+			boardDao.updateHits( no );
+			BoardVo boardVo = boardDao.get(  no );
+			return boardVo;
+		}
+		else{
+			BoardVo boardVo = boardDao.get(no);
+			return boardVo;
+		}
 	}
 	
 	public long write(BoardVo vo, HttpSession session){
@@ -80,7 +80,6 @@ public class BoardService {
 		if( session == null ) {
 			return 0;
 		}
-		
 		UserVo authUser = (UserVo)session.getAttribute( "authUser" );
 		if( authUser == null ) {
 			return 0;
@@ -92,11 +91,6 @@ public class BoardService {
 			vo.setDepth( vo.getDepth()  + 1 );
 			boardDao.updateGroupOrder( vo );
 		}
-		boardDao.insert(vo);
-		//TODO: Obtaining Auto-Increment Values?
-		return 1;
+		return boardDao.insert(vo);
 	}
-	
-	
-	
 }

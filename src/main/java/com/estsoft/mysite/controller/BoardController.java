@@ -32,7 +32,7 @@ public class BoardController {
 	
 	@RequestMapping("/view/{no}")
 	public String view(@PathVariable( "no" ) Long no, Model model){
-		BoardVo boardVo = boardService.view(no);
+		BoardVo boardVo = boardService.get(no, true);
 		model.addAttribute("boardVo", boardVo);
 		return "/board/view";
 	}
@@ -45,33 +45,32 @@ public class BoardController {
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(@ModelAttribute BoardVo vo, HttpSession session){
 		long no = boardService.write(vo, session);
-		if(no==-1){
-			return "redirect:/board/list";
+		if(no==0){
+			return "redirect:/board";
 		}
-		//TODO return "redirect:/board/view/"+no;
-		return "redirect:/board/";
+		return "redirect:/board/view/"+no;
 	}
 	
 	@RequestMapping(value="/write/{no}", method=RequestMethod.GET)
 	public String reply(@PathVariable( "no" ) Long no, Model model){
-		BoardVo boardVo = boardService.get(no);
+		BoardVo boardVo = boardService.get(no, false);
 		model.addAttribute("boardVo", boardVo);
 		return "/board/reply";
 	}
 	
 	@RequestMapping(value="/modify/{no}", method=RequestMethod.GET)
 	public String modifyform(@PathVariable( "no" ) Long no, Model model){
-		BoardVo boardVo = boardService.get(no);
+		BoardVo boardVo = boardService.get(no, false);
 		model.addAttribute("boardVo", boardVo);
 		return "/board/modify";
 	}
 	
 	@RequestMapping(value="/modify/{no}", method=RequestMethod.POST)
 	public String modify(@PathVariable( "no" ) Long no, Model model){
-		BoardVo boardVo = boardService.view(no);
-		model.addAttribute("boardVo", boardVo);
-		//TODO: 여기도 글번호 view로 날려주면 좋을 것 같다
-		return "/board/";
+		BoardVo boardVo = boardService.get(no, false);
+		//TODO: 수정 코드 아직 구현 안함
+		//model.addAttribute("boardVo", boardVo);
+		return "/board/view"+no;
 	}
 	
 	@RequestMapping(value="/delete", method=RequestMethod.GET)
@@ -84,5 +83,4 @@ public class BoardController {
 		//
 		return "/board/";
 	}
-	
 }

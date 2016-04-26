@@ -25,10 +25,14 @@
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Component" />
 	</context:component-scan>
-	
-	<bean id="mySQLWebDBConnection"  
-			class="com.estsoft.db.MySQLWebDBConnection"></bean>
-			
-	<!--bean id="mariaDBConnection"  
-			class="com.estsoft.db.MariaDBConnection"></bean-->			
+
+	<!-- Connection Pool DataSource -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/webdb" />
+		<property name="username" value="webdb" />
+		<property name="password" value="webdb" />
+	</bean>
+
+	<!--bean id="mariaDBConnection" class="com.estsoft.db.MariaDBConnection"></bean -->
 </beans> 

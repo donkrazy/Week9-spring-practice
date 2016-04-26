@@ -5,17 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.estsoft.db.DBConnection;
 import com.estsoft.mysite.vo.UserVo;
 
 @Repository
 public class UserDao {
 
 	@Autowired
-	private DBConnection dbConnection;
+	private DataSource dataSource;
+	
 	
 	public UserVo get( String email ) {
 		UserVo vo = null;
@@ -23,7 +25,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			
 			String sql = "SELECT no, email FROM user WHERE email=?";
 			pstmt = conn.prepareStatement( sql );
@@ -64,7 +66,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			String sql = "SELECT no, name, email, gender FROM user WHERE no=?"; 
 			pstmt = conn.prepareStatement( sql );
 			pstmt.setLong( 1, userNo );
@@ -115,7 +117,7 @@ public class UserDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			String sql = 
 	"SELECT no, name, email FROM user WHERE email=? AND passwd=password(?)"; 
 			pstmt = conn.prepareStatement( sql );
@@ -158,7 +160,7 @@ public class UserDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			if( "".equals( userVo.getPassword() ) ) {
 				String sql = "UPDATE user SET  name=?, gender=? WHERE no = ?";
 				pstmt = conn.prepareStatement( sql );
@@ -197,7 +199,7 @@ public class UserDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			String sql = 
 	"INSERT INTO user VALUES (null, ?, ?, password(?), ? )";
 			

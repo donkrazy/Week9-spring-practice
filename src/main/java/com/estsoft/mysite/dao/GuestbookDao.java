@@ -8,33 +8,32 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.estsoft.db.DBConnection;
 import com.estsoft.mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookDao {
 	
 	@Autowired
-	private DBConnection dbConnection;
+	private DataSource dataSource;
+	
 	public GuestbookVo get( Long no ) {
 		GuestbookVo vo = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			conn = dbConnection.getConnection();
-			
+			conn = dataSource.getConnection();
 			String sql = "SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message from guestbook where no = ?";
 			pstmt = conn.prepareStatement( sql );
-			
 			pstmt.setLong( 1, no ); 
 			rs = pstmt.executeQuery();
 			if( rs.next() ) {
 				vo = new GuestbookVo();
-
 				vo.setNo( rs.getLong( 1 ) );
 				vo.setName( rs.getString( 2 ) );
 				vo.setRegDate( rs.getString( 3 ) );
@@ -69,7 +68,7 @@ public class GuestbookDao {
 		Statement stmt = null;
 		ResultSet rs  = null;
 		try{
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			String sql = "INSERT INTO guestbook VALUES( null, ?, now(), ?, password(?) )";
 			pstmt = conn.prepareStatement( sql );
 			pstmt.setString( 1,  vo.getName() );
@@ -111,7 +110,7 @@ public class GuestbookDao {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try{
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			String sql = "DELETE FROM guestbook WHERE no = ? AND passwd = password(?)";
 			pstmt = conn.prepareStatement( sql );
 			pstmt.setLong( 1,  vo.getNo() );
@@ -139,7 +138,7 @@ public class GuestbookDao {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			stmt = conn.createStatement();
 			String sql = "SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message from guestbook ORDER BY reg_date desc";
 			rs = stmt.executeQuery( sql );
@@ -182,7 +181,7 @@ public class GuestbookDao {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			conn = dbConnection.getConnection();
+			conn = dataSource.getConnection();
 			stmt = conn.createStatement();
 			String sql = 
 				"      SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message" +
