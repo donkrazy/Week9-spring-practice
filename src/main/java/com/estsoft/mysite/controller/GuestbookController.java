@@ -19,7 +19,7 @@ public class GuestbookController {
 	@Autowired
 	GuestbookService guestbookService;
 	
-	@RequestMapping( "/ ")
+	@RequestMapping( "")
 	public String index( Model model ) {
 		List<GuestbookVo> list = guestbookService.getMessageList();
 		model.addAttribute( "list", list );

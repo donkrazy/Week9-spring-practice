@@ -7,7 +7,7 @@
 		SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message from guestbook where no = #{HERE ARE JEGIRAL: anything can be here but 'no' is recommend}
 	</select>
 	
-	<select id="selectList" resultType="com.estsoft.mysite.vo.GuestbookVo">
+	<select id="selectList" resultType="guestbookvo">
 		<![CDATA[
 		SELECT no, 
 			   name,

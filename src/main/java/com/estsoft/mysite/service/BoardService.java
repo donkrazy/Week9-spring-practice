@@ -18,6 +18,7 @@ import com.estsoft.utils.WebUtil;
 public class BoardService {
 	@Autowired
 	private BoardDao boardDao;
+	
 	private static final int SIZE_LIST = 7;     // 리스팅되는 게시물의 수
 	private static final int SIZE_PAGE = 5; // 페이지 리스트에서 표시되는 페이지 수
 	
@@ -63,10 +64,10 @@ public class BoardService {
 	}
 	
 	
-	public BoardVo get(long no, boolean view){
-		if(view){
-			boardDao.updateHits( no );
-			BoardVo boardVo = boardDao.get(  no );
+	public BoardVo get(long no, boolean updatehits){
+		if(updatehits){
+			boardDao.updateHits(no);
+			BoardVo boardVo = boardDao.get(no);
 			return boardVo;
 		}
 		else{

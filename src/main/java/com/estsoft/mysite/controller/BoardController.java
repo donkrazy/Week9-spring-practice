@@ -20,9 +20,8 @@ import com.estsoft.mysite.vo.BoardVo;
 @RequestMapping("/board")
 public class BoardController {
 	@Autowired
-	private BoardService boardService;
+	BoardService boardService;
 	
-	//FIXME @RequestMapping("/") 이건 왜 안되지?
 	@RequestMapping("")
 	public String index(@RequestParam(value="kwd", defaultValue="") String kwd,  @RequestParam(value="p", defaultValue="1") String page, Model model) {
 		Map<String, Object> map = boardService.list(kwd, page);
@@ -53,7 +52,7 @@ public class BoardController {
 	
 	@RequestMapping(value="/write/{no}", method=RequestMethod.GET)
 	public String reply(@PathVariable( "no" ) Long no, Model model){
-		BoardVo boardVo = boardService.get(no, false);
+		BoardVo boardVo = boardService.get(no, true);
 		model.addAttribute("boardVo", boardVo);
 		return "/board/reply";
 	}

@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,64 +21,30 @@ import com.estsoft.mysite.vo.BoardVo;
 public class BoardDao {
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+	private SqlSession sqlSession;
 
 	public BoardVo get( Long boardNo ) {
-		BoardVo boardVo = null;
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = dataSource.getConnection();
-			
-			String sql =
-				"     SELECT  no, title, content, group_no, order_no, depth, user_no" +
-				"      FROM  board" + 
-				"      WHERE no = ?";
-			pstmt = conn.prepareStatement( sql );
-			
-			pstmt.setLong( 1, boardNo );
-			rs = pstmt.executeQuery();
-			if( rs.next() ) {
-				Long no = rs.getLong( 1 );
-				String title = rs.getString( 2 );
-				String content = rs.getString( 3 );
-				Integer groupNo = rs.getInt( 4 );
-				Integer orderNo = rs.getInt( 5 );
-				Integer depth = rs.getInt( 6 );
-				Long userNo = rs.getLong( 7 );
-				
-				boardVo = new BoardVo();
-				boardVo.setNo( no );
-				boardVo.setTitle( title );
-				boardVo.setContent( content );
-				boardVo.setGroupNo( groupNo );
-				boardVo.setOrderNo( orderNo );
-				boardVo.setDepth( depth );
-				boardVo.setUserNo( userNo );
-			}
-			
-			return boardVo;
-		} catch( SQLException ex ) {
-			System.out.println( "error: " + ex);
-			return boardVo;
-		} finally {
-			try{
-				if( rs != null ) {
-					rs.close();
-				}
-				if( pstmt != null ) {
-					pstmt.close();
-				}
-				if( conn != null ) {
-					conn.close();
-				}
-			}catch( SQLException ex ) {
-				ex.printStackTrace();
-			}
-		}
+		BoardVo vo = sqlSession.selectOne("board.selectByNo", boardNo);
+		return vo;
 	}
 	
+	
+	//TODO: delete 구현
+	public void delete( BoardVo boardVo ) {
+		sqlSession.delete("board.delete", boardVo);
+	}	
+	
+
+	public void updateHits( Long no ) {
+		sqlSession.update("board.updateHits", no);
+	}
+	
+	public void updateGroupOrder( BoardVo boardVo ) {
+		sqlSession.update("board.updateGroupOrder", boardVo);
+	}
+
 	public long getTotalCount( String keyword ) {
 		long count = 0;
 		
@@ -200,66 +167,6 @@ public class BoardDao {
 			}
 		}
 	}
-
-	public void updateHits( Long no ) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		try{
-			conn = dataSource.getConnection();
-			String sql = 
-				"UPDATE board" +  
-				"      SET hits = hits + 1" +
-				" WHERE no = ?";  
-			pstmt = conn.prepareStatement( sql );
-			pstmt.setLong( 1, no );
-			
-			pstmt.executeUpdate();
-		} catch( SQLException ex ) {
-			System.out.println( "error:" + ex );
-		} finally {
-			try{
-				if( pstmt != null ) {
-					pstmt.close();
-				}
-				if( conn != null ) {
-					conn.close();
-				}
-			}catch( SQLException ex ) {
-				ex.printStackTrace();
-			}
-		}		
-	}
-	
-	public void updateGroupOrder( BoardVo boardVo ) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		try{
-			conn = dataSource.getConnection();
-			String sql = 
-				"UPDATE board" +  
-				"      SET order_no = order_no + 1" +
-				" WHERE group_no = ?" +
-				"    AND order_no >= ?";  
-			pstmt = conn.prepareStatement( sql );
-			pstmt.setInt( 1, boardVo.getGroupNo() );
-			pstmt.setInt( 2, boardVo.getOrderNo() );
-			
-			pstmt.executeUpdate();
-		} catch( SQLException ex ) {
-			System.out.println( "error:" + ex );
-		} finally {
-			try{
-				if( pstmt != null ) {
-					pstmt.close();
-				}
-				if( conn != null ) {
-					conn.close();
-				}
-			}catch( SQLException ex ) {
-				ex.printStackTrace();
-			}
-		}		
-	}
 	
 	
 	public long insert( BoardVo boardVo ) {
@@ -314,35 +221,4 @@ public class BoardDao {
 		return no;
 	}
 	
-	public void delete( BoardVo boardVo ) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		try{
-			conn = dataSource.getConnection();
-			String sql = 
-				" DELETE" +
-				"   FROM board" +  
-				" WHERE no = ?" +
-				"    AND user_no = ?";
-			pstmt = conn.prepareStatement( sql );
-			pstmt.setLong( 1, boardVo.getNo() );
-			pstmt.setLong( 2, boardVo.getUserNo() );
-			
-			pstmt.executeUpdate();
-		} catch( SQLException ex ) {
-			System.out.println( "error:" + ex );
-		} finally {
-			try{
-				if( pstmt != null ) {
-					pstmt.close();
-				}
-				if( conn != null ) {
-					conn.close();
-				}
-			}catch( SQLException ex ) {
-				ex.printStackTrace();
-			}
-		}		
-	}	
 }

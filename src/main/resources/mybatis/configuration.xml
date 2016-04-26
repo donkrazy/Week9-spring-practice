@@ -3,6 +3,8 @@
 <configuration>
 	<typeAliases>
 	<typeAlias type="com.estsoft.mysite.vo.GuestbookVo" alias="guestbookvo"/>
+	<typeAlias type="com.estsoft.mysite.vo.BoardVo" alias="boardvo"/>
+	<typeAlias type="com.estsoft.mysite.vo.UserVo" alias="uservo"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/mappers/user.xml" />
