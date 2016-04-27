@@ -30,7 +30,6 @@ public class BoardDao {
 		return vo;
 	}
 	
-	
 	//TODO: delete 구현
 	public void delete( BoardVo boardVo ) {
 		sqlSession.delete("board.delete", boardVo);
@@ -47,7 +46,6 @@ public class BoardDao {
 
 	public long getTotalCount( String keyword ) {
 		long count = 0;
-		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;

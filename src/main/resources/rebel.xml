@@ -6,16 +6,4 @@
 		</dir>
 	</classpath>
 
-	<web>
-		<link target="/">
-			<dir name="C:/Users/bit/workspace/mysite3/target/m2e-wtp/web-resources">
-				<exclude name="/"/>
-			</dir>
-		</link>
-		<link target="/">
-			<dir name="C:/Users/bit/workspace/mysite3/webapp">
-			</dir>
-		</link>
-	</web>
-
 </application>

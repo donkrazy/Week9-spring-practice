@@ -1,6 +1,8 @@
 package com.estsoft.mysite.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +27,13 @@ public class GuestbookService {
 	public boolean insertMessage( GuestbookVo vo ) {
 		Long no = guestbookDao.insert(vo);
 		return no != 0;
+	}
+	
+	public Map<String, Object> getList(int page){
+		List<GuestbookVo> list = guestbookDao.getList(page);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put( "result", "success" );
+		map.put( "data", list );
+		return map;
 	}
 }

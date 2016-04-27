@@ -30,8 +30,7 @@ public class GuestbookDao {
 	}
 	
 	public Long insert( GuestbookVo vo ) {
-		int count = sqlSession.insert("guestbook.insert", vo);
-		System.out.println(count);
+		sqlSession.insert("guestbook.insert", vo);
 		return vo.getNo();
 	}
 	

@@ -1,6 +1,7 @@
 package com.estsoft.mysite.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.estsoft.mysite.service.GuestbookService;
 import com.estsoft.mysite.vo.GuestbookVo;
@@ -19,11 +21,23 @@ public class GuestbookController {
 	@Autowired
 	GuestbookService guestbookService;
 	
-	@RequestMapping( "")
+	@RequestMapping("")
 	public String index( Model model ) {
 		List<GuestbookVo> list = guestbookService.getMessageList();
 		model.addAttribute( "list", list );
 		return "/guestbook/list";
+	}
+	
+	@RequestMapping( value="/ajax-list", method=RequestMethod.GET  )
+	public String ajaxIndex() {
+		return "/guestbook/ajax-main";
+	}
+	
+	@RequestMapping( value="/ajax-list/{page}", method=RequestMethod.GET  )
+	@ResponseBody
+	public Object ajaxList( @PathVariable( "page" ) int page ) {
+		Map<String, Object> map = guestbookService.getList(page);
+		return map;
 	}
 	
 	@RequestMapping( value="/delete/{no}", method=RequestMethod.GET )
@@ -43,4 +57,5 @@ public class GuestbookController {
 		guestbookService.insertMessage(vo);
 		return "redirect:/guestbook";
 	}
+	
 }

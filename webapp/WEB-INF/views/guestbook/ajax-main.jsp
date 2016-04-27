@@ -16,27 +16,23 @@ var page = 1;
 var dialogDelete = null;
 var fetchList = function() {
 	$.ajax({
-		url: "${pageContext.request.contextPath }/guestbook?a=ajax-list&p=" + page,
+		url: "${pageContext.request.contextPath }/guestbook/ajax-list/" + page,
 		type: "get",
 		dataType: "json",
-		data: "",
 		success: function( response ) {
 			if( response.result != "success" ) {
 				return;
 			}
-			
 			if( response.data.length == 0 ) {
 				//$( "#btn-next" ).hide();
 				$( "#btn-next" ).attr( "disabled", true );
 				return;
 			}
-			
 			// HTML 생성한 후 UL에 append
 			$.each( response.data, function(index, vo){
 				//console.log( index + ":" + vo );
 				$( "#gb-list" ).append( renderHtml( vo ) );	
 			});
-			
 			page++;
 		},
 		error: function( xhr/*XMLHttpRequest*/, status, error ) {
@@ -75,15 +71,11 @@ $(function(){
 
 		// AJAX 통신
 		$.ajax({
-			url:"${pageContext.request.contextPath }/guestbook", 
+			url:"${pageContext.request.contextPath }/guestbook/add/", 
 			type: "post",
 			dataType: "json",
-			data: "a=ajax-insert" +
-				   "&name=" + name + 
-				   "&pass=" + password +
-				   "&content=" + message,
+			data:  {"name": name, "password" : password, "message": message},
 			success: function( response ){
-				// console.log( response );
 				$( "#gb-list" ).prepend( renderHtml( response.data ) );	
 			},
 			error: function( xhr/*XMLHttpRequest*/, status, error ) {
@@ -134,12 +126,10 @@ $(function(){
         		var no = $( "#del-no" ).val();
         		var password = $( "#del-password" ).val();
         		console.log( "clicked:" + no + ":" + password );
-        		
         		$.ajax( {
-        			url
-        			data: "a=ajax-delete&no=&password=", 
+        			url: "/ajax-delete/"+no,
+        			data: ""
         		});
-        		
         	},
         	"취소": function() {
         		dialogDelete.dialog( "close" );
