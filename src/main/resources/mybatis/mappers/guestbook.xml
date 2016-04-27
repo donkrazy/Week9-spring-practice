@@ -4,7 +4,7 @@
 <mapper namespace="guestbook">
 
 	<select id="selectByNo" resultType="guestbookvo" parameterType="long">
-		SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ) as regDate, message from guestbook where no = #{no}
+		SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ) as regDate, message from guestbook where no = #{nodflkjasfdjasdlfkjdslkfj}
 	</select>
 	
 	<select id="selectList" resultType="guestbookvo">
@@ -15,6 +15,15 @@
 			   message 
 		from   guestbook 
 		ORDER BY reg_date desc
+		]]>
+	</select>
+	
+	<select id="selectListPage" resultType="guestbookvo" parameterType="int">
+		<![CDATA[
+		   SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ) as regDate, message
+		   FROM guestbook
+		   ORDER BY reg_date desc 
+		   LIMIT #{page}, 5;
 		]]>
 	</select>
 

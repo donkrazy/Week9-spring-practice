@@ -24,23 +24,67 @@
 		]]>
 	</update>
 	
-	<select id="getTotalCount" parameterType="string" resultType="long">
-		<![CDATA[
-				IF문		
-		]]>
+	<select id="getTotalCount" parameterType="String" resultType="long">
+		<choose>
+			<when test="null != #{value} and '' != #{value}">
+				<![CDATA[ 
+			 		SELECT count(*) FROM  board a, user b WHERE a.user_no = b.no
+					AND ( title LIKE '%${value}%' OR title LIKE '%${value}%' )
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[ 
+					SELECT count(*) FROM  board a, user b WHERE a.user_no = b.no 
+				]]>
+			</otherwise>
+		</choose>
 	</select>
 	
-	<select id="getList" parameterType="string" resultType="long">
-		<![CDATA[
-				IF문		
-		]]>
+	<select id="getList" parameterType="string" resultType="map">
+		<choose>
+			<when test="null != #{value} and '' != #{value} ">
+				<![CDATA[ 
+			 			     SELECT  a.no, a.title, b.name as userName, b.no, a.hits, DATE_FORMAT(reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate, depth
+						       FROM  board a, user b
+						      WHERE a.user_no = b.no AND (a.title LIKE '%${keyword}%' OR a.content LIKE '%${keyword}%')
+						   ORDER BY  group_no DESC, order_no ASC
+						      LIMIT  #{page}, #{listSize};
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[ 
+					     SELECT  a.no, a.title, b.name as userName, b.no, a.hits, DATE_FORMAT(reg_date, '%Y-%m-%d %p %h:%i:%s') as regDate, depth
+						      FROM  board a, user b
+						     WHERE a.user_no = b.no
+						  ORDER BY  group_no DESC, order_no ASC
+						     LIMIT  #{page}, #{listSize};
+				]]>
+			</otherwise>
+		</choose>
 	</select>
 	
-	<select id="insert" parameterType="string" resultType="long">
-		<![CDATA[
-				IF문		
-		]]>
-	</select>
+	<insert id="insert" parameterType="boardvo">
+		<choose>
+			<when test="groupNo==null">
+				<![CDATA[ 
+				INSERT INTO board VALUES( 
+					null, '${title}', now(), '${content}', #{userNo}, 
+					(select ifnull( max( group_no ), 0 ) + 1 from board as b), 1, 0, 0 
+				)
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[ 
+				INSERT INTO board VALUES(
+					null, #{title}, now(), #{content},  #{userNo}, #{groupNo}, #{orderNo}, #{depth}, 1
+				)	
+				]]>
+			</otherwise>
+		</choose>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>	
+	</insert>
 	
 	<delete id="delete" parameterType="boardvo">
 		DELETE FROM board WHERE no = #{no} AND user_no = #{userNo}

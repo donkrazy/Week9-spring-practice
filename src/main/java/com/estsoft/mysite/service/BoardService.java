@@ -22,7 +22,7 @@ public class BoardService {
 	private static final int SIZE_LIST = 7;     // 리스팅되는 게시물의 수
 	private static final int SIZE_PAGE = 5; // 페이지 리스트에서 표시되는 페이지 수
 	
-	public Map<String, Object>  list(String keyword, String page){
+	public Map<String, Object> list(String keyword, String page){
 		long currentPage = 1; 
 		// 페이징 정보
 		if( page != null && WebUtil.isNumeric( page ) ) {
@@ -47,7 +47,8 @@ public class BoardService {
 			nextPage = lastPage + 1;
 		}
 		// 리스트 가져오기
-		List<BoardVo> list = boardDao.getList( keyword, currentPage, SIZE_LIST  );
+		List<BoardVo> list = boardDao.getList( keyword, SIZE_LIST*(currentPage-1), SIZE_LIST  );
+		System.out.println(list);
 
 		// 포워딩
 		Map<String, Object> map = new HashMap<String, Object>();

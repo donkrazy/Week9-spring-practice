@@ -27,14 +27,12 @@ public class GuestbookService {
 		int countDeleted = guestbookDao.delete( vo );
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("result", "success");
-
 		if(countDeleted == 1){
 			map.put("data", vo.getNo() );
 		}
 		else{
 			map.put("data", null );
 		}
-		
 		return map; 
 	}
 	
