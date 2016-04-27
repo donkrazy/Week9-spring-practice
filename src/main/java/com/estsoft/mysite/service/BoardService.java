@@ -48,7 +48,6 @@ public class BoardService {
 		}
 		// 리스트 가져오기
 		List<BoardVo> list = boardDao.getList( keyword, SIZE_LIST*(currentPage-1), SIZE_LIST  );
-		System.out.println(list);
 
 		// 포워딩
 		Map<String, Object> map = new HashMap<String, Object>();

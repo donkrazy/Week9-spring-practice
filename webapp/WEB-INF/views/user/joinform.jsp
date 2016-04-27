@@ -30,12 +30,8 @@ $(function(){
 			alert( "이메일 중복 체크를 해야 합니다." );
 			return false;	
 		}
-		
 		// 3. 패스워드 유효성 체크
-		
 		// 3. 약관 체크유무  // jQuery is checked
-
-//		return true;
 		return true;	
 	});
 	

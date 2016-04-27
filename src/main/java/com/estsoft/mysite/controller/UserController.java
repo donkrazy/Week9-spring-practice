@@ -45,28 +45,27 @@ public class UserController {
 	}
 	
 	@RequestMapping( "/login" )
-	public String login(@ModelAttribute UserVo vo, HttpSession session ) {
+	public String login(@ModelAttribute UserVo vo, HttpSession session, @RequestParam(value="next", defaultValue="main") String nextURL) {
 		UserVo userVo = userService.login( vo );
 		if( userVo == null ) {
 			// 로그인 실패
 			return "user/loginform_fail";
 		}
-		
 		//로그인 성공
 		session.setAttribute( "authUser", userVo );
-		return "redirect:/main";
+		System.out.println("redirect:"+nextURL);
+		return "redirect:"+nextURL;
 	}
 	
 	@RequestMapping( "/logout" )
-	public String logout( HttpSession session ) {
+	public String logout( HttpSession session, @RequestParam(value="next", defaultValue="main") String nextURL) {
 		// 인증유무 체크
 		UserVo authUser = (UserVo)session.getAttribute( "authUser" );
 		if( authUser != null ) {
 			session.removeAttribute( "authUser" );
 			session.invalidate();
 		}
-		
-		return "redirect:/main";
+		return "redirect:"+nextURL;
 	}
 	
 	@RequestMapping( "/checkemail" )
