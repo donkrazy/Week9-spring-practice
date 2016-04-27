@@ -138,7 +138,9 @@ $(function(){
         				}
         				// 삭제하지 못한 경우.
         				$( "#del-password" ).val( "" );
-        				console.log("삭제하지 못하였다")
+        				console.log("삭제하지 못하였다");
+        				$("#dialog-console").html('<font color="red">너의 비밀번호는 틀린 것이야</font>');
+        				
         			},
         			//통신 실패. fail: function(){} 는 안된다
         			error: function(){ 
@@ -153,6 +155,7 @@ $(function(){
       	},
       	open: function() {
       		console.log("다이얼로그 창 초기화")
+      		$("#dialog-console").text('메세지의 비밀번호를 입력해 주세요.');
       	},
       	close: function() {
       		$( "#dialog-form form" ).get(0).reset();
@@ -198,7 +201,7 @@ $(function(){
   		<p style="line-height:50px">Hello World</p>
 	</div>
 	<div id="dialog-form" title="메세지 비밀번호 입력">
-		<p class="validateTips">메세지의 비밀번호를 입력해 주세요.</p>
+		<p class="validateTips" id="dialog-console">메세지의 비밀번호를 입력해 주세요.</p>
  	 	<form style="margin-top:20px">
       		<label for="password">비밀번호</label>
       		<input type="hidden"  id="del-no"  value="">
