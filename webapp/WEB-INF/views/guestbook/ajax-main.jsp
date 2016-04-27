@@ -71,7 +71,7 @@ $(function(){
 
 		// AJAX 통신
 		$.ajax({
-			url:"${pageContext.request.contextPath }/guestbook/add/", 
+			url:"${pageContext.request.contextPath }/guestbook/ajax-add/", 
 			type: "post",
 			dataType: "json",
 			data:  {"name": name, "password" : password, "message": message},
@@ -80,7 +80,7 @@ $(function(){
 			},
 			error: function( xhr/*XMLHttpRequest*/, status, error ) {
 				console.error( status + ":" + error );
-			}			
+			}				
 		});
 	});
 	
@@ -125,17 +125,37 @@ $(function(){
         	"삭제": function() {
         		var no = $( "#del-no" ).val();
         		var password = $( "#del-password" ).val();
-        		console.log( "clicked:" + no + ":" + password );
+        		
         		$.ajax( {
-        			url: "/ajax-delete/"+no,
-        			data: ""
+        			url: "/guestbook/ajax-delete",
+        			type: "POST",
+        			data: {	"no": no,  "password" : password },
+        			success: function(response){ 
+        				if( response.data != null ) {
+            				dialogDelete.dialog( "close" );
+            				$("#li-"+response.data).remove();
+            				return;
+        				}
+        				// 삭제하지 못한 경우.
+        				$( "#del-password" ).val( "" );
+        				console.log("삭제하지 못하였다")
+        			},
+        			//통신 실패. fail: function(){} 는 안된다
+        			error: function(){ 
+        				console.log("통신에 실패하였다");
+        			}
         		});
+        		
         	},
         	"취소": function() {
         		dialogDelete.dialog( "close" );
         	}
       	},
+      	open: function() {
+      		console.log("다이얼로그 창 초기화")
+      	},
       	close: function() {
+      		$( "#dialog-form form" ).get(0).reset();
 			//form[ 0 ].reset();
         	//allFields.removeClass( "ui-state-error" );
       	}

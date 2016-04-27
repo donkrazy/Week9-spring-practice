@@ -16,7 +16,6 @@ public class GuestbookService {
 	GuestbookDao guestbookDao;
 
 	public List<GuestbookVo> getMessageList() {
-		
 		return guestbookDao.getList();
 	}
 	
@@ -24,9 +23,33 @@ public class GuestbookService {
 		return guestbookDao.delete( vo ) == 1;
 	}
 	
+	public Object deleteMessage( GuestbookVo vo, boolean isAjax) {
+		int countDeleted = guestbookDao.delete( vo );
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("result", "success");
+
+		if(countDeleted == 1){
+			map.put("data", vo.getNo() );
+		}
+		else{
+			map.put("data", null );
+		}
+		
+		return map; 
+	}
+	
 	public boolean insertMessage( GuestbookVo vo ) {
 		Long no = guestbookDao.insert(vo);
 		return no != 0;
+	}
+	
+	public Map<String, Object> insertMessage( GuestbookVo vo, boolean isAjax ) {
+		long no = guestbookDao.insert(vo);
+		vo = guestbookDao.get(no);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put( "result", "success" );
+		map.put( "data", vo );
+		return map;
 	}
 	
 	public Map<String, Object> getList(int page){

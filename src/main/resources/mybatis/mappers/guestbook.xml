@@ -4,7 +4,7 @@
 <mapper namespace="guestbook">
 
 	<select id="selectByNo" resultType="guestbookvo" parameterType="long">
-		SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ), message from guestbook where no = #{HERE ARE JEGIRAL: anything can be here but 'no' is recommend}
+		SELECT no, name, DATE_FORMAT( reg_date, '%Y-%m-%d %p %h:%i:%s' ) as regDate, message from guestbook where no = #{no}
 	</select>
 	
 	<select id="selectList" resultType="guestbookvo">

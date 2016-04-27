@@ -28,6 +28,35 @@ public class GuestbookController {
 		return "/guestbook/list";
 	}
 	
+
+	@RequestMapping( value="/add", method=RequestMethod.POST  )
+	public String add( @ModelAttribute GuestbookVo vo ) {
+		guestbookService.insertMessage(vo);
+		return "redirect:/guestbook";
+	}
+	
+	@RequestMapping( value="/ajax-add", method=RequestMethod.POST  )
+	@ResponseBody
+	public Object ajaxAdd( @ModelAttribute GuestbookVo vo ) {
+		boolean isAjax = true;
+		Map<String, Object> map = guestbookService.insertMessage(vo, isAjax);
+		return map;
+	}
+	
+//	//SANDBOX: 그냥 string값 날려도 ajax에서 response로 받을 수 있따
+//	@RequestMapping( value="/ajax-delete", method=RequestMethod.POST  )
+//	@ResponseBody
+//	public String ajaxDelete( @ModelAttribute GuestbookVo vo ) {
+//		return "succeeee";
+//	}
+	
+	@RequestMapping( value="/ajax-delete", method=RequestMethod.POST  )
+	@ResponseBody
+	public Object ajaxDelete( @ModelAttribute GuestbookVo vo ) {
+		boolean isAjax = true;
+		return guestbookService.deleteMessage(vo, isAjax);
+	}
+
 	@RequestMapping( value="/ajax-list", method=RequestMethod.GET  )
 	public String ajaxIndex() {
 		return "/guestbook/ajax-main";
@@ -52,10 +81,5 @@ public class GuestbookController {
 		return "redirect:/guestbook";
 	}
 
-	@RequestMapping( value="/add", method=RequestMethod.POST  )
-	public String add( @ModelAttribute GuestbookVo vo ) {
-		guestbookService.insertMessage(vo);
-		return "redirect:/guestbook";
-	}
 	
 }
