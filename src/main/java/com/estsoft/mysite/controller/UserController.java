@@ -3,8 +3,6 @@ package com.estsoft.mysite.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,41 +42,14 @@ public class UserController {
 		return "/user/loginform";
 	}
 	
-	@RequestMapping( "/login" )
-	public String login(@ModelAttribute UserVo vo, HttpSession session, @RequestParam(value="next", defaultValue="main") String nextURL) {
-		UserVo userVo = userService.login( vo );
-		if( userVo == null ) {
-			// 로그인 실패
-			return "user/loginform_fail";
-		}
-		//로그인 성공
-		session.setAttribute( "authUser", userVo );
-		System.out.println("redirect:"+nextURL);
-		return "redirect:"+nextURL;
-	}
-	
-	@RequestMapping( "/logout" )
-	public String logout( HttpSession session, @RequestParam(value="next", defaultValue="main") String nextURL) {
-		// 인증유무 체크
-		UserVo authUser = (UserVo)session.getAttribute( "authUser" );
-		if( authUser != null ) {
-			session.removeAttribute( "authUser" );
-			session.invalidate();
-		}
-		return "redirect:"+nextURL;
-	}
-	
 	@RequestMapping( "/checkemail" )
 	@ResponseBody
 	public Object checkEmail( 
 		@RequestParam( value="email", required=true, defaultValue="" ) String email ) {
-		
 		UserVo vo = userService.getUser( email );
-		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put( "result", "success" );
 		map.put( "data", vo == null );
-
 		return map;
 	}
 

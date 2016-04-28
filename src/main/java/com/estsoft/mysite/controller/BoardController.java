@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.estsoft.mysite.annotation.Auth;
 import com.estsoft.mysite.service.BoardService;
 import com.estsoft.mysite.vo.BoardVo;
 
@@ -21,9 +22,11 @@ import com.estsoft.mysite.vo.BoardVo;
 public class BoardController {
 	@Autowired
 	BoardService boardService;
+	//private static final Log LOG = LogFactory.getLog( MainController.class );
 	
 	@RequestMapping("")
 	public String index(@RequestParam(value="kwd", defaultValue="") String kwd,  @RequestParam(value="p", defaultValue="1") String page, Model model) {
+		//LOG.error( "index called" );
 		Map<String, Object> map = boardService.list(kwd, page);
 		model.addAttribute( "map", map );
 		return "/board/list";
@@ -36,11 +39,13 @@ public class BoardController {
 		return "/board/view";
 	}
 	
+	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.GET)
 	public String writeform(){
 		return "/board/write";
 	}
 	
+	@Auth
 	@RequestMapping(value="/write", method=RequestMethod.POST)
 	public String write(@ModelAttribute BoardVo vo, HttpSession session){
 		long no = boardService.write(vo, session);
