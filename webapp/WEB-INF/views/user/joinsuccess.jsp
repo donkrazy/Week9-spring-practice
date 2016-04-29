@@ -14,11 +14,8 @@
 		<c:import url="/WEB-INF/views/include/header.jsp" />
 		<div id="content">
 			<div id="user">
-				<p class="jr-success">
-					회원가입을 축하합니다.
-					<br><br>
-					<a href="${pageContext.request.contextPath}/user/loginform">로그인하기</a>
-				</p>				
+				<p class="jr-success">회원가입을 축하합니다.</p>
+				<p>세션처리했으니 로그인따위는 필요없다</p>				
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/include/navigation.jsp" />

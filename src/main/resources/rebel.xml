@@ -8,6 +8,11 @@
 
 	<web>
 		<link target="/">
+			<dir name="C:/Users/bit/workspace/Week9-spring-practice/target/m2e-wtp/web-resources">
+				<exclude name="/"/>
+			</dir>
+		</link>
+		<link target="/">
 			<dir name="C:/Users/bit/workspace/Week9-spring-practice/webapp">
 			</dir>
 		</link>

@@ -8,7 +8,7 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	xmlns:mvc="http://www.springframework.org/schema/mvc">
 
-	<!-- 2. validator, conversionService, messageConverter를 자동으로 등록 -->
+	<!--1. validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
 		<mvc:message-converters>
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -27,14 +27,24 @@
 				</property>
 			</bean>
 		</mvc:message-converters>
+
+		<!--7 argument resolver -->
+		<mvc:argument-resolvers>
+			<bean class="com.estsoft.mysite.resolver.AuthUserHandlerMethodArgumentResolver" />
+		</mvc:argument-resolvers>
+
 	</mvc:annotation-driven>
 
-	<!-- 1. 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
+	<!-- 2. 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
 	<mvc:default-servlet-handler />
+
+	<!-- 3. @Controller 스캔 -->
 	<context:annotation-config />
 	<context:component-scan base-package="com.estsoft.mysite" />
 
-	<!-- 3. 기본 뷰 리졸버 -->
+
+
+	<!-- 4. 뷰 리졸버 -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
@@ -43,17 +53,12 @@
 		<property name="suffix" value=".jsp" />
 		<property name="order" value="1" />
 	</bean>
-
-	<!-- Interceptors -->
+	
+	<!-- 5. Interceptors -->
 	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/board/**" />
-			<bean class="com.estsoft.mysite.interceptor.MyInterceptor" />
-		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/guestbook/**" />
-			<bean class="com.estsoft.mysite.interceptor.MyInterceptor2" />
-		</mvc:interceptor>
+		<!-- <mvc:interceptor> <mvc:mapping path="/board/**" /> <bean class="com.estsoft.mysite.interceptor.MyInterceptor" 
+			/> </mvc:interceptor> <mvc:interceptor> <mvc:mapping path="/guestbook/**" 
+			/> <bean class="com.estsoft.mysite.interceptor.MyInterceptor2" /> </mvc:interceptor> -->
 		<mvc:interceptor>
 			<mvc:mapping path="/user/login" />
 			<bean class="com.estsoft.mysite.interceptor.AuthLoginInterceptor" />
@@ -63,10 +68,27 @@
 			<bean class="com.estsoft.mysite.interceptor.AuthLogoutInterceptor" />
 		</mvc:interceptor>
 		<mvc:interceptor>
-			<mvc:mapping path="/**/" />
+			<mvc:mapping path="/user/join" />
+			<bean class="com.estsoft.mysite.interceptor.AuthJoinInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/assets/**" />
 			<bean class="com.estsoft.mysite.interceptor.AuthInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
+
+
+	<!-- 6. MessageSource -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages/messages_ko</value>
+				<value>messages/messages_en</value>
+			</list>
+		</property>
+	</bean>
+
 
 </beans>

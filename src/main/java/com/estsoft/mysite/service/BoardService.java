@@ -76,22 +76,13 @@ public class BoardService {
 		}
 	}
 	
-	public long write(BoardVo vo, HttpSession session){
-		// 인증 유무 체크
-		if( session == null ) {
-			return 0;
-		}
-		UserVo authUser = (UserVo)session.getAttribute( "authUser" );
-		if( authUser == null ) {
-			return 0;
-		}
-		vo.setUserNo( authUser.getNo() );
+
+	public void write( BoardVo vo ){
 		if( vo.getGroupNo() != null ) {
-			//vo.setGroupNo( vo.getGroupNo() );
 			vo.setOrderNo( vo.getOrderNo()  + 1 );
 			vo.setDepth( vo.getDepth()  + 1 );
 			boardDao.updateGroupOrder( vo );
 		}
-		return boardDao.insert(vo);
+		boardDao.insert( vo );
 	}
 }

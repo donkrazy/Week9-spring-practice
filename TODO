@@ -4,4 +4,3 @@ css적용(practice참고)
 board: 삭제 코드도 practice 코드 참고하여 구현
 또라이 클라이언트 처리: no=null일때 에러처리(modifyformAction.java)
 로그인 후 NEXT-URL -> 방명록에서 p kwd 인자 전달 안됨
-회원가입 후 세션 부여

@@ -33,6 +33,6 @@ public class UserDao {
 	}
 	
 	public void insert( UserVo vo ) {
-		sqlSession.update( "user.update", vo );
+		sqlSession.insert( "user.insert", vo );
 	}
 }

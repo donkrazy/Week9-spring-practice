@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <html>
@@ -12,6 +13,9 @@
 	src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.9.0.js"></script>
 <script type="text/javascript">
 $(function(){
+	
+	/* frontend validation check 잠시 막아둠
+	
 	$( "#join-form").submit( function() {
 		//1. 이름 유효성 체크
 		if( $("#name").val() == "" ) {
@@ -34,6 +38,9 @@ $(function(){
 		// 3. 약관 체크유무  // jQuery is checked
 		return true;	
 	});
+	
+	*/
+	
 	
 	$( "#email" ).change( function() {
 		$( "#btn-checkemail" ).show();
@@ -89,11 +96,27 @@ $(function(){
 					action="${pageContext.request.contextPath}/user/join">
 					<label class="block-label" for="name">이름</label>
 					<input id="name" name="name" type="text" value="">
+					<spring:hasBindErrors name="userVo">
+					   <c:if test="${errors.hasFieldErrors('name') }">
+					        <br>
+					        <strong style="color:red">${errors.getFieldError( 'name' ).defaultMessage }</strong>
+					   </c:if>
+					</spring:hasBindErrors>
 
 					<label class="block-label" for="email">이메일</label>
 					<input id="email" name="email" type="text" value="">
 					<input id="btn-checkemail" type="button" value="id 중복체크">
 					<img id="img-checkemail" style="display:none;" src="${pageContext.request.contextPath}/assets/images/check.png">
+					<spring:hasBindErrors name="userVo">
+					    <c:if test="${errors.hasFieldErrors('email') }">
+					        <p style="color:blue">${errors.getFieldError( 'email' ) } </p>
+					        <br><br>
+				         	<strong style="color:purple">
+					        	<c:set var="errorEmail" value="${errors.getFieldError( 'email' ).codes[0] }"/>
+						        <spring:message code="${errorEmail }" text="${errors.getFieldError('email').defaultMessage }" />	
+					        </strong>
+					    </c:if>
+					</spring:hasBindErrors>			
 					
 					<label class="block-label">패스워드</label>
 					<input name="password" type="password" value="">

@@ -29,7 +29,7 @@
 	
 	<update id="update" parameterType="UserVo">
 		<![CDATA[
-		update member
+		update user
 		   set name = #{name },
 		]]>   
 		<if test="password != ''">

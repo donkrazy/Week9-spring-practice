@@ -1,41 +1,61 @@
 package com.estsoft.mysite.vo;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class UserVo {
 	private Long no;
+	
+	@NotEmpty(message="[UserVo]이름이 비어있다")
 	private String name;
+
+	@NotEmpty(message="[UserVo]이메일이 비어있따")
+	@Email(message="[UserVo]이메일 형식이 맞지 않습니다")
 	private String email;
+	
 	private String password;
 	private String gender;
+
 	public Long getNo() {
 		return no;
 	}
+
 	public void setNo(Long no) {
 		this.no = no;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public String getGender() {
 		return gender;
 	}
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 	@Override
 	public String toString() {
 		return "UserVo [no=" + no + ", name=" + name + ", email=" + email + ", password=" + password + ", gender="
