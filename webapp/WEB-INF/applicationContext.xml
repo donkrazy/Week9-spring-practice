@@ -25,12 +25,21 @@
 			expression="org.springframework.stereotype.Component" />
 	</context:component-scan>
 
-	<!-- Connection Pool DataSource -->
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/webdb" />
-		<property name="username" value="webdb" />
-		<property name="password" value="webdb" />
+	<!-- 암호화된 Datasource -->
+	<bean id="dataSource" class="com.estsoft.utils.DecryptDataSource">
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="url">
+			<value>yf2QODoLKefWgUEKRUynSeXMi4vuKk6Dq+iRipThlFDxB50MJnba9/CMdf8x4708xfensi5jaWLCX/nKfmOd4kEVYg84/mQ9qBCdA+vzNdQJwdjaddPHcw==
+			</value>
+		</property>
+		<property name="username">
+			<value>Hfs3i7cc6/SkgIH7E078WA==</value>
+		</property>
+		<property name="password">
+			<value>VAFh8KnzV3yggY16lM/HXOiY7mn1TLWU</value>
+		</property>
 	</bean>
 
 	<!-- MyBatis SqlSessionFactoryBean -->
