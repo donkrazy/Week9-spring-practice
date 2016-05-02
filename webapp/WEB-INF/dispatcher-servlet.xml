@@ -7,6 +7,7 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	xmlns:mvc="http://www.springframework.org/schema/mvc">
+	
 
 	<!--1. validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
@@ -30,7 +31,8 @@
 
 		<!--7 argument resolver -->
 		<mvc:argument-resolvers>
-			<bean class="com.estsoft.mysite.resolver.AuthUserHandlerMethodArgumentResolver" />
+			<bean
+				class="com.estsoft.mysite.resolver.AuthUserHandlerMethodArgumentResolver" />
 		</mvc:argument-resolvers>
 
 	</mvc:annotation-driven>
@@ -53,7 +55,7 @@
 		<property name="suffix" value=".jsp" />
 		<property name="order" value="1" />
 	</bean>
-	
+
 	<!-- 5. Interceptors -->
 	<mvc:interceptors>
 		<!-- <mvc:interceptor> <mvc:mapping path="/board/**" /> <bean class="com.estsoft.mysite.interceptor.MyInterceptor" 
@@ -89,6 +91,7 @@
 			</list>
 		</property>
 	</bean>
-
-
+	
+	<!--8 AOP Auto Proxy -->
+	<aop:aspectj-autoproxy />
 </beans>
